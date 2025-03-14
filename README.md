@@ -1,4 +1,5 @@
-# My Research Project
+# ASD_FaceReg_Modeling_CNN Research Project 
+Xijing Wang, Emily Rios, Dr. Lang Chen in Santa Clara University in LCCN Lab
 
 This project demonstrates a convolutional neural network (CNN) approach with two special variants:
 - **EIB (E/I Imbalance) Model**: A custom activation function simulating excitatory and inhibitory imbalances.
