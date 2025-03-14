@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import (
     Conv2D, MaxPooling2D, Flatten, Dense, Dropout,
-    BatchNormalization, Layer, Input
+    BatchNormalization, Layer, Input, GaussianNoise,
 )
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
@@ -59,9 +59,10 @@ class CustomReLU(Layer):
 #######################
 # Build CNN Model
 #######################
-def build_EIB_cnn(
+def build_cnn(
     input_shape=(130, 130, 3),
     slope_positive=1.0,
+    noise_level=0,
     filter_size=16,
     num_classes=10
 ):
@@ -91,6 +92,8 @@ def build_EIB_cnn(
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.2))
+    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
+
 
     # Block 2: Double filter count
     filter_size *= 2
@@ -99,6 +102,8 @@ def build_EIB_cnn(
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(BatchNormalization())
     model.add(Dropout(0.2))
+    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
+
 
     # Block 3: Double filter count again
     filter_size *= 2
@@ -107,13 +112,15 @@ def build_EIB_cnn(
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(BatchNormalization())
     model.add(Dropout(0.2))
+    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
+
 
     # Dense Layers
     model.add(Flatten())
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     # Naming the second Dense layer consistently with the slope value
-    layer_name = f'least2_Dense_{slope_positive}'
+    layer_name = f'least2_Dense_{slope_positive}_{noise_level}'
     model.add(Dense(64, activation='relu', name=layer_name))
     model.add(Dropout(0.5))
 

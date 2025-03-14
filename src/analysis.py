@@ -256,11 +256,12 @@ def plot_metrics_acc(metrics_dict, epochs_num, title, ylabel):
     plt.grid(True)
     plt.show()
 
-def visualized_cor_mat(ep, iteration, label, slope=0.05):
+def visualized_cor_mat(switch, ep, iteration, label, slope=0.05, noise=0):
     """
     Load a JSON file containing correlation matrices, compute the mean matrix for each key, and visualize the matrix corresponding to a given slope value.
 
     Inputs:
+      - switch: 1 represents reading EIB data, 0 represents reading IN data.
       - ep: An identifier (e.g., an integer) representing the epoch, used to construct the JSON file path.
       - iteration: An integer representing the iteration number; the JSON file name is derived using iteration-1.
       - label: A string label used for the visualization.
@@ -272,7 +273,13 @@ def visualized_cor_mat(ep, iteration, label, slope=0.05):
     Raises:
       - FileNotFoundError: If the specified JSON file does not exist.
     """
-    json_file_path = f"../res/EIB/{ep}/cor_output_{ep}_{iteration - 1}.json"
+
+    if switch:
+      json_file_path = f"../res/EIB/{ep}/cor_output_{ep}_{iteration - 1}.json"
+    else:
+      json_file_path = f"../res/IN/{ep}/cor_output_{ep}_{iteration - 1}.json"
+
+
     if not os.path.exists(json_file_path):
         raise FileNotFoundError(f"Error: {json_file_path} does not exist.")
     
