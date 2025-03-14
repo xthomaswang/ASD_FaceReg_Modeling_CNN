@@ -1,0 +1,11 @@
+numpy
+scipy
+matplotlib
+pandas
+opencv-python
+tensorflow
+seaborn
+Pillow
+
+# Uncomment the following line if you prefer to use PyTorch instead of TensorFlow
+# torch
