@@ -13,7 +13,7 @@ These models are evaluated using **correlation analysis of feature representatio
 
 Below is an overview of the CNN architecture used in this study:
 
-![Model Architecture](docs/images/model_architecture.png)
+![Model Architecture](docs/images/CNN_structure.jpg)
 
 ---
 
