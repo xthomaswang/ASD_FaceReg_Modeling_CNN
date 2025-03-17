@@ -83,12 +83,12 @@ def build_cnn(
     Output:
       - model (tf.keras.Model): A compiled Keras model ready for training.
     """
-    model = Sequential()
+    model = Sequential(name=f'cnn_model_{slope_positive}_{noise_level}')
 
     # Block 1
     model.add(Conv2D(filters=filter_size, kernel_size=(5, 5),
-                     input_shape=input_shape, padding="same"))
-    model.add(CustomReLU(slope_positive))
+                     input_shape=input_shape, padding="same", name='conv_block1_conv'))
+    model.add(CustomReLU(slope_positive, name='conv_block1_relu'))
     model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.2))
@@ -97,8 +97,8 @@ def build_cnn(
 
     # Block 2: Double filter count
     filter_size *= 2
-    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5)))
-    model.add(CustomReLU(slope_positive))
+    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5), name='conv_block2_conv'))
+    model.add(CustomReLU(slope_positive, name='conv_block2_relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(BatchNormalization())
     model.add(Dropout(0.2))
@@ -107,8 +107,8 @@ def build_cnn(
 
     # Block 3: Double filter count again
     filter_size *= 2
-    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5)))
-    model.add(CustomReLU(slope_positive))
+    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5), name='conv_block3_conv'))
+    model.add(CustomReLU(slope_positive, name='conv_block3_relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(BatchNormalization())
     model.add(Dropout(0.2))
@@ -168,6 +168,7 @@ def train_model(
       - val_acc: List of validation accuracy values for each epoch.
       - val_loss: List of validation loss values for each epoch.
     """
+
     X = np.array(data)
     Y = np.array(labels.drop(['img_id'], axis=1))
     
