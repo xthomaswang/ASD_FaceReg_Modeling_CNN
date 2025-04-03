@@ -1,0 +1,54 @@
+ANOVA Table (type III tests)
+
+       Effect DFn  DFd          F p p<.05   pes
+1       Epoch 100 5757    272.994 0     * 0.826
+2       noise   2 5757 100869.373 0     * 0.972
+3 Epoch:noise 200 5757     45.897 0     * 0.615
+ANOVA Table (type III tests)
+
+       Effect DFn  DFd          F p p<.05   pes
+1       Epoch 100 5757    272.994 0     * 0.826
+2       noise   2 5757 100869.373 0     * 0.972
+3 Epoch:noise 200 5757     45.897 0     * 0.615
+
+	Two Sample t-test
+
+data:  Acc by noise
+t = 9.6874, df = 38, p-value = 8.192e-12
+alternative hypothesis: true difference in means between group 0 and group 0.5 is not equal to 0
+95 percent confidence interval:
+ 0.1453512 0.2221488
+sample estimates:
+  mean in group 0 mean in group 0.5 
+          0.87250           0.68875 
+
+ANOVA Table (type III tests)
+
+  Effect DFn DFd       F        p p<.05   pes
+1  noise   2  57 824.479 8.54e-43     * 0.967
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 noise 0      0.5             0   -0.184   -0.230    -0.137 1.20e-11 ****        
+2 noise 0      5               0   -0.755   -0.802    -0.708 1.12e-11 ****        
+3 noise 0.5    5               0   -0.571   -0.618    -0.525 1.12e-11 ****        
+ANOVA Table (type III tests)
+
+  Effect DFn DFd        F        p p<.05   pes
+1  noise   2  57 2560.188 1.55e-56     * 0.989
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 noise 0      0.5             0  -0.0200  -0.0524    0.0124 3.06e- 1 ns          
+2 noise 0      5               0  -0.845   -0.877    -0.813  1.12e-11 ****        
+3 noise 0.5    5               0  -0.825   -0.857    -0.793  1.12e-11 ****        
+ANOVA Table (type III tests)
+
+  Effect DFn DFd        F        p p<.05   pes
+1  noise   2  57 1511.989 4.12e-50     * 0.981
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 noise 0      0.5             0  -0.0250  -0.0661    0.0161 3.15e- 1 ns          
+2 noise 0      5               0  -0.825   -0.866    -0.784  1.12e-11 ****        
+3 noise 0.5    5               0  -0.800   -0.841    -0.759  1.12e-11 ****        

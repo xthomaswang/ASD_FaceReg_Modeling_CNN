@@ -1,0 +1,18 @@
+ANOVA Table (type III tests)
+
+      Effect DFn DFd        F        p p<.05   pes
+1      noise   2  57   33.411 2.50e-10     * 0.540
+2       Type   1  57 1548.072 5.19e-43     * 0.964
+3 noise:Type   2  57  121.059 3.03e-21     * 0.809
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 noise 0      0.5             0  -0.0545  -0.0765   -0.0324 5.32e- 7 ****        
+2 noise 0      5               0  -0.0966  -0.119    -0.0746 1.12e-11 ****        
+3 noise 0.5    5               0  -0.0422  -0.0642   -0.0201 7.06e- 5 ****        
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 noise 0      0.5             0    0.311   0.204      0.419 1.08e- 8 ****        
+2 noise 0      5               0    0.511   0.403      0.618 1.12e-11 ****        
+3 noise 0.5    5               0    0.199   0.0919     0.307 1.13e- 4 ***         

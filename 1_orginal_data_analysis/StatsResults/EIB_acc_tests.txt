@@ -1,0 +1,54 @@
+ANOVA Table (type III tests)
+
+       Effect DFn  DFd         F p p<.05   pes
+1       Epoch 100 5757   300.592 0     * 0.839
+2       slope   2 5757 23051.581 0     * 0.889
+3 Epoch:slope 200 5757    18.258 0     * 0.388
+ANOVA Table (type III tests)
+
+       Effect DFn  DFd         F p p<.05   pes
+1       Epoch 100 5757   300.592 0     * 0.839
+2       slope   2 5757 23051.581 0     * 0.889
+3 Epoch:slope 200 5757    18.258 0     * 0.388
+
+	Two Sample t-test
+
+data:  Acc by slope
+t = -5.4735, df = 38, p-value = 3.002e-06
+alternative hypothesis: true difference in means between group 0.005 and group 0.05 is not equal to 0
+95 percent confidence interval:
+ -0.17123186 -0.07876813
+sample estimates:
+mean in group 0.005  mean in group 0.05 
+            0.74125             0.86625 
+
+ANOVA Table (type III tests)
+
+  Effect DFn DFd       F        p p<.05   pes
+1  slope   2  57 243.071 1.25e-28     * 0.895
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.005  0.05            0    0.125   0.0610     0.189 4.98e- 5 ****        
+2 slope 0.005  0.5             0   -0.434  -0.498     -0.370 1.12e-11 ****        
+3 slope 0.05   0.5             0   -0.559  -0.623     -0.495 1.12e-11 ****        
+ANOVA Table (type III tests)
+
+  Effect DFn DFd       F        p p<.05   pes
+1  slope   2  57 281.838 2.79e-30     * 0.908
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.005  0.05            0  0.00875  -0.0408    0.0583 9.05e- 1 ns          
+2 slope 0.005  0.5             0 -0.419    -0.468    -0.369  1.12e-11 ****        
+3 slope 0.05   0.5             0 -0.428    -0.477    -0.378  1.12e-11 ****        
+ANOVA Table (type III tests)
+
+  Effect DFn DFd      F        p p<.05   pes
+1  slope   2  57 225.25 8.66e-28     * 0.888
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.005  0.05            0  0.00750  -0.0424    0.0574 9.31e- 1 ns          
+2 slope 0.005  0.5             0 -0.378    -0.427    -0.328  1.12e-11 ****        
+3 slope 0.05   0.5             0 -0.385    -0.435    -0.335  1.12e-11 ****        

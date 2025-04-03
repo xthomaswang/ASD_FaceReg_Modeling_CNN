@@ -1,0 +1,24 @@
+ANOVA Table (type III tests)
+
+     Effect DFn DFd       F        p p<.05   pes
+1       STD   2 171 221.954 3.01e-48     * 0.722
+2     Layer   2 171   5.627 4.00e-03     * 0.062
+3 STD:Layer   4 171   3.614 7.00e-03     * 0.078
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 STD   0      0.5             0    -28.5   -35.1     -21.9  1.13e-11 ****        
+2 STD   0      5               0    -12.9   -19.5      -6.31 4.74e- 5 ****        
+3 STD   0.5    5               0     15.6     8.99     22.2  1.35e- 6 ****        
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 STD   0      0.5             0   -25.3    -27.7     -22.9  1.12e-11 ****        
+2 STD   0      5               0   -18.3    -20.7     -16.0  1.12e-11 ****        
+3 STD   0.5    5               0     6.97     4.60      9.35 7.63e- 9 ****        
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 STD   0      0.5             0   -21.6   -26.8       -16.5 1.13e-11 ****        
+2 STD   0      5               0   -15.7   -20.9       -10.5 2.79e- 9 ****        
+3 STD   0.5    5               0     5.92    0.760      11.1 2.08e- 2 *           

@@ -1,0 +1,24 @@
+ANOVA Table (type III tests)
+
+       Effect DFn DFd       F        p p<.05   pes
+1       Slope   2 171 178.338 1.44e-42     * 0.676
+2       Layer   2 171  28.606 1.92e-11     * 0.251
+3 Slope:Layer   4 171  34.508 4.16e-21     * 0.447
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 Slope 0.005  0.05            0   27.0      19.5      34.5  2.84e-11 ****        
+2 Slope 0.005  0.5             0    0.923    -6.57      8.42 9.53e- 1 ns          
+3 Slope 0.05   0.5             0  -26.0     -33.5     -18.5  6.42e-11 ****        
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 Slope 0.005  0.05            0    20.6     18.1     23.1   1.12e-11 ****        
+2 Slope 0.005  0.5             0    -3.02    -5.50    -0.535 1.35e- 2 *           
+3 Slope 0.05   0.5             0   -23.6    -26.1    -21.2   1.12e-11 ****        
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 Slope 0.005  0.05            0    -4.58    -8.26    -0.893 1.13e- 2 *           
+2 Slope 0.005  0.5             0   -22.5    -26.1    -18.8   1.12e-11 ****        
+3 Slope 0.05   0.5             0   -17.9    -21.6    -14.2   1.12e-11 ****        
