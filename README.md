@@ -1,168 +1,126 @@
-# **A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations**
+# A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations
 
-This research project explores **convolutional neural networks (CNNs)** with two biologically ASD inspired modifications:
+This research project explores convolutional neural networks (CNNs) with biologically-inspired modifications to model autism spectrum disorder (ASD) characteristics:
 
-- **EIB (E/I Imbalance) Model**: Introduces a custom activation function to simulate **excitatory/inhibitory imbalances**, which are relevant in neuroscience studies (e.g., ASD research).
-- **IN (Internal Noise) Model**: Incorporates **Gaussian noise layers** in the network to examine the effects of stochastic internal representations.
-
-These models are evaluated using **correlation analysis of feature representations**, tracking their **learning behavior over extended training epochs**.
+- **E/I Imbalance Model**: Custom activation function simulating excitatory/inhibitory imbalances
+- **Internal Noise Model**: Gaussian noise layers modeling stochastic neural representations
 
 ---
 
-## **1. Model Structure**
-
-Below is an overview of the CNN architecture used in this study:
+## 1. Model Structure
 
 ![Model Architecture](docs/images/CNN_structure.jpg)
 
 ---
 
-## **2. Project Structure**
+## 2. Project Structure
 
-### **📂 Modules Overview**
+### `src/preprocessing.py`
+- `load_image(image_path)`: Loads an image from a given path
+- `resize_image(image, width, height)`: Resizes an image while maintaining aspect ratio
+- `normalize_image(image)`: Normalizes pixel values to [0, 1]
+- `augment_image(image)`: Performs data augmentation
 
-Each module is responsible for a specific aspect of data processing, model building, training, and analysis.
+### `src/models.py`
+- **`CustomActivation(slope_positive, slope_negative, threshold)`**: Custom activation layer supporting:
+  - **Thresholded ReLU**: `slope_negative=0.0` (default)
+  - **Thresholded Leaky ReLU**: `slope_negative>0.0`
+  - Configurable activation threshold
 
-#### 📂 `src/preprocessing.py`
-- **`load_image(image_path)`**: Loads an image from a given path.
-- **`resize_image(image, width=None, height=None)`**: Resizes an image while maintaining aspect ratio.
-- **`normalize_image(image)`**: Normalizes pixel values to **[0, 1]**.
-- **`augment_image(image)`**: Performs optional **data augmentation**.
+- **`build_cnn(input_shape, slope_positive, slope_negative, threshold, noise_level, filter_size, num_classes, learning_rate, categorical)`**: 
+  - Builds CNN with CustomActivation layers
+  - Parameters control E/I imbalance simulation and internal noise
+  
+- `train_model(model, data, labels, n_epochs, batch_size, verbose)`: Trains the model with efficient train/test splitting
+- `evaluate_model(model, test_data, test_labels)`: Evaluates classification accuracy
 
-#### 📂 `src/models.py`
-- **`build_base_cnn(input_shape, num_classes)`**: Standard CNN baseline.
-- **`build_EIB_cnn(input_shape, num_classes, e_coeff=1.0, i_coeff=1.0)`**:  
-  → Implements **E/I Imbalance** via a custom ReLU function.
-- **`build_IN_cnn(input_shape, num_classes, noise_std=0.1)`**:  
-  → Introduces **Gaussian noise** into the network.
-- **`train_model(model, train_data, train_labels, ...)`**:  
-  → Trains the model with **block-based train/test splitting**.
-- **`evaluate_model(model, test_data, test_labels)`**:  
-  → Evaluates **classification accuracy**.
+### `src/analysis.py`
+- `compute_correlation_matrix(features)`: Computes feature correlation matrices
+- `extract_intermediate_features(model, layer_name, data)`: Extracts activations from intermediate layers
+- `compute_pearson_correlation(vec1, vec2)`: Computes Pearson correlation coefficients
 
-#### 📂 `src/analysis.py`
-- **`compute_correlation_matrix(features)`**:  
-  → Computes **feature correlation** to analyze representation similarity.
-- **`extract_intermediate_features(model, layer_name, data)`**:  
-  → Extracts **activations from an intermediate layer**.
-- **`compute_pearson_correlation(vec1, vec2)`**:  
-  → Computes **Pearson correlation coefficients**.
-
-#### 📂 `src/utils.py`
-- **`is_google_colab()`**: Checks if the script is running on Google Colab.
-- **`install_missing_packages()`**: Installs missing dependencies **automatically**.
+### `src/utils.py`
+- `is_google_colab()`: Checks if running on Google Colab
+- `install_missing_packages()`: Installs missing dependencies automatically
 
 ---
 
-## **3. Running the Project**
+## 3. Running the Project
 
-### **🔹 Installing Dependencies**
-To set up your environment, run:
-
+### Installing Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### **🔹 Running Locally**
+### Running Locally
 Execute scripts with Python or use Jupyter Notebooks from the `notebooks/` directory.
 
-### **🔹 Running in Google Colab**
-- Clone the repository or manually upload it.
-- Run `install_missing_packages()` from `src/utils.py` if necessary.
+### Running in Google Colab
+Clone the repository and run `install_missing_packages()` from `src/utils.py` if necessary.
 
 ---
 
-## **4. Training & Evaluation**
+## 4. Training & Evaluation
 
-### **🧑‍🏫 Training Details**
-1. **Choose the desired model:**
-   - **`build_EIB_cnn`** (Excitatory/Inhibitory Imbalance)
-   - **`build_IN_cnn`** (Internal Noise)
-2. **Load and preprocess the dataset.**
-3. **Train using** `train_model(...)`.
-4. **Evaluate using** `evaluate_model(...)`.
+### Training
+1. Build model using `build_cnn()` with desired parameters:
+   - `slope_negative=0.0` for Thresholded ReLU (E/I Imbalance)
+   - `noise_level>0` for Internal Noise model
+2. Load and preprocess dataset
+3. Train using `train_model()`
+4. Evaluate using `evaluate_model()`
 
-### **📈 Recommended Training Epochs**
-Based on the original dataset and experimental settings, the model requires **at least 750 epochs** to show strong correlation effects.
+### Recommended Training Epochs
+At least 750 epochs are recommended to observe strong correlation effects.
 
 ---
 
-## **5. Understanding the `res/` Folder**
+## 5. Results Directory Structure
 
-All experimental results—including training logs, accuracy/loss records, and feature correlation matrices—are stored in the `res/` folder. Below are examples of how the results are organized for each model type:
-
-### **📂 `res/EIB/` (E/I Imbalance Model Results)**
-Example directory structure:
+Experimental results are stored in `res/` folder:
 
 ```
 res/EIB/750/
-    ├── trainedAcc_750.json    # Training Accuracy per epoch
-    ├── trainedLoss_750.json    # Training Loss per epoch
-    ├── validationAcc_750.json  # Validation Accuracy per epoch
-    ├── validationLoss_750.json # Validation Loss per epoch
-    ├── cor_output_750_4.json   # Feature correlation at epoch 750 (iteration 4)
-```
-
-### **📂 `res/IN/` (Internal Noise Model Results)**
-Example directory structure:
-
-```
-res/IN/750/
     ├── trainedAcc_750.json
     ├── trainedLoss_750.json
     ├── validationAcc_750.json
     ├── validationLoss_750.json
-    ├── cor_output_750_4.json
+    └── cor_output_750_4.json
 ```
-
-These JSON files contain the performance metrics and correlation data generated during training.
 
 ---
 
-## **6. Feature Analysis & Visualization**
+## 6. Feature Analysis
 
-After training, analyze the feature representations using the following steps:
+### Extract and Analyze Features
+```python
+# Extract intermediate features
+features = extract_intermediate_features(model, "layer_name", test_data)
 
-1. **Extract Intermediate Features**
-   ```python
-   features = extract_intermediate_features(model, "conv_layer", test_data)
-   ```
-2. **Compute Correlation Matrix**
-   ```python
-   corr_matrix = compute_correlation_matrix(features)
-   ```
-3. **Plot Correlation Heatmap**
-   ```python
-   import seaborn as sns
-   import matplotlib.pyplot as plt
+# Compute correlation matrix
+corr_matrix = compute_correlation_matrix(features)
 
-   sns.heatmap(corr_matrix, cmap="coolwarm", annot=True)
-   plt.title("Feature Correlation Heatmap")
-   plt.show()
-   ```
+# Visualize
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.heatmap(corr_matrix, cmap="coolwarm")
+plt.show()
+```
 
-### **Example: Feature Correlation Heatmap**
 ![Feature Correlation Example](docs/images/correlation_heatmap.png)
 
 ---
 
-## **7. Future Work**
-- Extend **E/I Imbalance** studies to real-world datasets.
-- Compare **Internal Noise (Gaussian)** with other types of stochastic perturbations.
-- Explore self-supervised learning approaches with these models.
+## 7. Contributors For Codes
+- Xijing Wang
+- Dr. Lang Chen
 
 ---
 
-## **8. Contributors**
-- **Xijing Wang**
-- **Dr. Lang Chen**
+## 8. License
+MIT License
 
 ---
 
-## **9. License**
-This project is released under the **MIT License**.
-
----
-
-## **10. References**
+## 9. References
 Waiting for link ...

@@ -22,34 +22,14 @@ from tensorflow.keras.models import Model
 # 1) Pairwise Image Correlation
 ############################
 
-def cor_calculator(img1, img2, model, layer_name):
-    """
-    Compute the Pearson correlation coefficient between two images based on feature representations extracted from a specified layer of a model.
-
-    Inputs:
-      - img1: A preprocessed image array.
-      - img2: A preprocessed image array.
-      - model: A compiled/trained tf.keras.Model.
-      - layer_name: A string representing the name of the layer from which to extract features.
-    
-    Output:
-      - A float representing the Pearson correlation coefficient between the flattened feature representations of img1 and img2.
-    """
-    # Create an intermediate model that outputs the specified layer's output
-    intermediate_layer_model = Model(inputs=model.input,
-                                     outputs=model.get_layer(layer_name).output)
-    
-    # Obtain and flatten the output features for each image
-    output1 = intermediate_layer_model.predict(np.expand_dims(img1, axis=0)).flatten()
-    output2 = intermediate_layer_model.predict(np.expand_dims(img2, axis=0)).flatten()
-    
-    # Compute and return the Pearson correlation coefficient between the two feature vectors
-    ans = np.corrcoef(output1, output2)[0, 1]
-    return ans
-
 def compute_correlations(image_data, model, layer_name):
     """
-    Compute a symmetric correlation matrix for a set of images using feature representations extracted from a specific layer of a model.
+    OPTIMIZED: Compute a symmetric correlation matrix for a set of images.
+
+    This version is significantly faster by:
+    1. Creating the intermediate model only once.
+    2. Extracting features for all images in a single batch prediction.
+    3. Using vectorized numpy operations to compute the correlation matrix.
 
     Inputs:
       - image_data: A dictionary where keys are image file paths and values are preprocessed image arrays.
@@ -59,35 +39,36 @@ def compute_correlations(image_data, model, layer_name):
     Output:
       - A NumPy array of shape (N, N) containing the Pearson correlation coefficients between every pair of images.
     """
-    # Sort images to ensure consistent matrix indices
-    all_images = list(sorted(image_data.keys()))
-    num_images = len(all_images)
+    # 1. Create the feature extraction model ONCE.
+    
+    intermediate_model = Model(inputs=model.layers[0].input, outputs=model.get_layer(layer_name).output)
 
-    # Generate list of image pairs for which the correlation will be computed (only upper triangular pairs)
-    pairs = [(all_images[i], all_images[j]) 
-             for i in range(num_images) for j in range(i, num_images)]
-
-    def compute_correlation(pair):
-        img_path1, img_path2 = pair
-        return cor_calculator(image_data[img_path1],
-                              image_data[img_path2],
-                              model, layer_name)
-
-    # Use a ThreadPoolExecutor to compute correlations in parallel
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        results = list(executor.map(compute_correlation, pairs))
-
-    # Fill in a symmetric correlation matrix using the computed results
-    correlation_matrix = np.zeros((num_images, num_images), dtype=np.float32)
-    k = 0
-    for i in range(num_images):
-        for j in range(i, num_images):
-            correlation_matrix[i, j] = results[k]
-            correlation_matrix[j, i] = results[k]
-            k += 1
-
-    return correlation_matrix
-
+    # 2. Prepare a single batch of all images for efficient prediction.
+    sorted_paths = sorted(image_data.keys())
+    image_batch = np.array([image_data[path] for path in sorted_paths])
+    
+    print(f"Extracting features from layer '{layer_name}' for {len(image_batch)} images...")
+    
+    # 3. Predict on the entire batch to get all feature vectors at once.
+    all_features = intermediate_model.predict(image_batch)
+    
+    # Reshape the features to be a 2D array (num_images, num_features_flattened)
+    # This is necessary because convolutional layers output multi-dimensional features.
+    num_images = all_features.shape[0]
+    flattened_features = all_features.reshape(num_images, -1)
+    
+    print("Computing correlation matrix using vectorized operations...")
+    
+    # 4. Compute the entire correlation matrix at once using numpy.
+    # This is orders of magnitude faster than pairwise calculation.
+    correlation_matrix = np.corrcoef(flattened_features)
+    
+    # Handle potential NaN values that can occur if a feature vector has zero variance.
+    correlation_matrix = np.nan_to_num(correlation_matrix, nan=0.0)
+    
+    print(f"Correlation matrix computed. Shape: {correlation_matrix.shape}")
+    
+    return correlation_matrix.astype(np.float32)
 ############################
 # 2) Visualizations
 ############################
@@ -256,44 +237,39 @@ def plot_metrics_acc(metrics_dict, epochs_num, title, ylabel):
     plt.grid(True)
     plt.show()
 
-def visualized_cor_mat(switch, ep, iteration, label, slope=0.05, noise=0):
+def visualized_cor_mat(
+    all_cor_data,  # <-- NEW: Pass the entire loaded correlation dictionary
+    positive_slope,
+    negative_slope,
+    noise_level,
+    label
+):
     """
-    Load a JSON file containing correlation matrices, compute the mean matrix for each key, and visualize the matrix corresponding to a given slope value.
-
-    Inputs:
-      - switch: 1 represents reading EIB data, 0 represents reading IN data.
-      - ep: An identifier (e.g., an integer) representing the epoch, used to construct the JSON file path.
-      - iteration: An integer representing the iteration number; the JSON file name is derived using iteration-1.
-      - label: A string label used for the visualization.
-      - slope: A float (default 0.05) indicating the key in the JSON data for which the mean correlation matrix is to be visualized.
-    
-    Output:
-      - Displays a heatmap visualization of the mean correlation matrix corresponding to the provided slope value.
-    
-    Raises:
-      - FileNotFoundError: If the specified JSON file does not exist.
+    NEW VERSION: Selects data for a specific parameter combination from the
+    aggregated correlation dictionary, computes the mean matrix, and visualizes it.
     """
-
-    if switch:
-      json_file_path = f"../res/EIB/{ep}/cor_output_{ep}_{iteration - 1}.json"
-    else:
-      json_file_path = f"../res/IN/{ep}/cor_output_{ep}_{iteration - 1}.json"
-
-
-    if not os.path.exists(json_file_path):
-        raise FileNotFoundError(f"Error: {json_file_path} does not exist.")
+    # Construct the key to look up in the dictionary
+    key = (positive_slope, negative_slope, noise_level)
     
-    # Load the JSON file containing correlation data
-    with open(json_file_path, 'r', encoding='utf-8') as file:
-        cor_dict = json.load(file)
+    print(f"--- Visualizing mean correlation matrix for key: {key} ---")
     
-    mean_data = {}
-    for key, arrays in cor_dict.items():
-        # Convert list of arrays into a NumPy array for averaging
-        arrays_np = np.array(arrays)
-        # Compute the mean correlation matrix for the given key
-        mean_array = np.mean(arrays_np, axis=0)
-        mean_data[float(key)] = mean_array  # Convert key to float for consistency
+    # Get the list of correlation matrices for this key (from all iterations)
+    matrices = all_cor_data.get(key)
+    
+    if not matrices:
+        print(f"❌ ERROR: No correlation data found for key {key}.")
+        return
 
-    # Visualize the correlation matrix corresponding to the specified slope value
-    visualize_c(mean_data[slope], label)
+    # Calculate the mean correlation matrix across all iterations
+    mean_matrix = np.mean(np.array(matrices), axis=0)
+    
+    print(f"Aggregated {len(matrices)} runs. Mean matrix shape: {mean_matrix.shape}")
+    
+    # Call your main visualization function (assuming it's named visualize_c)
+    # This function should be defined elsewhere in your notebook.
+    try:
+        visualize_c(mean_matrix, label)
+    except NameError:
+        print("Warning: `visualize_c` function is not defined. Cannot display plot.")
+        # As a fallback, let's print the matrix shape
+        print("Mean correlation matrix computed, but plotting function is unavailable.")

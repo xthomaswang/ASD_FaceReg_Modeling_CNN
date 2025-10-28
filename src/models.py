@@ -1,60 +1,54 @@
-# src/models.py
+# src/models.py 
 
 """
 Module: models
-Description: Contains functions and classes to build, train, and evaluate a CNN model.
-Includes a custom ReLU activation, CNN architecture definition, model training, and evaluation.
+Description: Contains optimized functions to build, train, and evaluate a CNN model.
+Includes a versatile custom activation layer supporting both ReLU and PReLU-like behaviors,
+now with a configurable activation threshold.
 """
 
-import os
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
-
-from tensorflow.keras import backend as K
 from tensorflow.keras.layers import (
     Conv2D, MaxPooling2D, Flatten, Dense, Dropout,
-    BatchNormalization, Layer, Input, GaussianNoise,
+    BatchNormalization, Layer, Input, GaussianNoise
 )
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 #######################
-# Custom ReLU Activation
+# Custom Activation Layer (with Threshold)
 #######################
-def custom_relu(inputs, slope_positive=1.0):
+# @tf.keras.saving.register_keras_serializable()
+class CustomActivation(Layer):
     """
-    Compute a custom ReLU activation.
-
-    Description:
-      Returns (slope_positive * x) if x > 0, otherwise returns 0.
-    
-    Inputs:
-      - inputs: A TensorFlow tensor representing input values.
-      - slope_positive (float): The scaling factor for positive values (default is 1.0).
-    
-    Output:
-      - A TensorFlow tensor with the custom ReLU applied element-wise.
+    A custom Keras layer that applies a versatile activation function.
+    - NEW: Includes a configurable 'threshold' to shift the activation boundary.
+    - If slope_negative is 0, it acts like a shifted & scaled ReLU.
+    - If slope_negative > 0, it acts like a shifted LeakyReLU.
     """
-    return tf.where(inputs > 0, slope_positive * inputs, tf.zeros_like(inputs))
-
-class CustomReLU(Layer):
-    """
-    A custom Keras layer that applies the custom ReLU activation.
-
-    Inputs:
-      - inputs: A TensorFlow tensor.
-      - slope_positive (float): The scaling factor for positive values.
-    
-    Output:
-      - A TensorFlow tensor with the custom ReLU activation applied.
-    """
-    def __init__(self, slope_positive=1.0, **kwargs):
+    def __init__(self, slope_positive=1.0, slope_negative=0.0, threshold=0.0, **kwargs):
         super().__init__(**kwargs)
         self.slope_positive = slope_positive
+        self.slope_negative = slope_negative
+        self.threshold = threshold  # The new activation threshold parameter
 
     def call(self, inputs):
-        return custom_relu(inputs, self.slope_positive)
+        """Applies the activation logic using the custom threshold."""
+        # The condition is now based on the configurable threshold
+        return tf.where(inputs > self.threshold, 
+                        self.slope_positive * (inputs - self.threshold), 
+                        self.slope_negative * (inputs - self.threshold))
+    
+    def get_config(self):
+        """Enables model saving and loading with the new parameter."""
+        config = super().get_config()
+        config.update({
+            'slope_positive': self.slope_positive,
+            'slope_negative': self.slope_negative,
+            'threshold': self.threshold  # Ensure threshold is saved
+        })
+        return config
 
 #######################
 # Build CNN Model
@@ -62,136 +56,90 @@ class CustomReLU(Layer):
 def build_cnn(
     input_shape=(130, 130, 3),
     slope_positive=1.0,
+    slope_negative=0.0,
+    threshold=0.0, 
     noise_level=0,
     filter_size=16,
-    num_classes=10
+    num_classes=10,
+    learning_rate=0.001,
+    categorical=True  # false = 'binary_crossentropy', true = 'categorical_crossentropy'
 ):
     """
-    Build and compile a CNN model with custom activation layers.
-
-    Description:
-      Constructs a CNN model composed of three convolutional blocks followed by dense layers.
-      Each convolutional block increases the number of filters and includes a custom ReLU activation,
-      BatchNormalization, MaxPooling, and Dropout. The model ends with a softmax output layer.
-
-    Inputs:
-      - input_shape (tuple): Shape of the input images (height, width, channels).
-      - slope_positive (float): The positive slope for the CustomReLU activation.
-      - filter_size (int): Initial number of convolution filters (doubles with each block).
-      - num_classes (int): Number of output classes.
-    
-    Output:
-      - model (tf.keras.Model): A compiled Keras model ready for training.
+    Builds and compiles a CNN model with the versatile CustomActivation layer.
     """
-    model = Sequential(name=f'cnn_model_{slope_positive}_{noise_level}')
-
-    # Block 1
-    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5),
-                     input_shape=input_shape, padding="same", name='conv_block1_conv'))
-    model.add(CustomReLU(slope_positive, name='conv_block1_relu'))
-    model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.2))
-    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
-
-
-    # Block 2: Double filter count
-    filter_size *= 2
-    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5), name='conv_block2_conv'))
-    model.add(CustomReLU(slope_positive, name='conv_block2_relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(BatchNormalization())
-    model.add(Dropout(0.2))
-    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
-
-
-    # Block 3: Double filter count again
-    filter_size *= 2
-    model.add(Conv2D(filters=filter_size, kernel_size=(5, 5), name='conv_block3_conv'))
-    model.add(CustomReLU(slope_positive, name='conv_block3_relu'))
-    model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(BatchNormalization())
-    model.add(Dropout(0.2))
-    model.add(GaussianNoise(stddev=noise_level, input_shape=input_shape))
-
-
-    # Dense Layers
+    model = Sequential(name=f'cnn_model_sp{slope_positive}_sn{slope_negative}_t{threshold}_n{noise_level}')
+    
+    model.add(Input(shape=input_shape))
+    
+    # Build convolutional blocks in a loop
+    for i in range(3):
+        block_name = f'conv_block{i+1}'
+        current_filters = filter_size * (2 ** i)
+        
+        model.add(Conv2D(current_filters, (5, 5), padding="same", name=f'{block_name}_conv'))
+        
+        # Use the versatile CustomActivation layer with the new threshold
+        model.add(CustomActivation(
+            slope_positive=slope_positive, 
+            slope_negative=slope_negative, 
+            threshold=threshold,  # Pass the threshold here
+            name=f'{block_name}_relu' 
+        ))
+        
+        model.add(BatchNormalization())
+        model.add(MaxPooling2D((2, 2)))
+        model.add(Dropout(0.2))
+        
+        if noise_level > 0:
+            model.add(GaussianNoise(stddev=noise_level, name=f'{block_name}_noise'))
+    
+    # Dense layers
     model.add(Flatten())
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
-    # Naming the second Dense layer consistently with the slope value
-    layer_name = f'least2_Dense_{slope_positive}_{noise_level}'
+    layer_name = f'least2_Dense_sp{slope_positive}_sn{slope_negative}_t{threshold}_n{noise_level}' # Updated name
     model.add(Dense(64, activation='relu', name=layer_name))
     model.add(Dropout(0.5))
-
-    # Output layer with softmax activation
     model.add(Dense(num_classes, activation='softmax'))
-
-    # Compile the model with the Adam optimizer and binary crossentropy loss.
-    # Note: Use binary_crossentropy for one-hot encoded multi-output labels.
-    model.compile(optimizer='adam',
-                  loss='binary_crossentropy',
-                  metrics=['accuracy'])
-
+    
+    # Compile the model
+    loss_function = 'categorical_crossentropy' if categorical else 'binary_crossentropy'
+    optimizer = Adam(learning_rate=learning_rate)
+    print(f"➡️ Compiling model with loss function: {loss_function}")
+    model.compile(optimizer=optimizer, loss=loss_function, metrics=['accuracy'])
+    
     return model
 
 #######################
-# Train the Model
+# Train and Evaluate Functions (Unchanged)
 #######################
+
 def train_model(
     model,
-    data,       # Full dataset as a NumPy array (e.g., images)
-    labels,     # Label set matching the order of data; expected as a DataFrame
+    data,
+    labels,
     n_epochs=10,
     batch_size=64,
     verbose=1
 ):
     """
-    Train the given CNN model using a specific train/test split strategy.
-
-    Description:
-      Splits the data so that for every block of 5 images, the first image is used for testing,
-      and the remaining 4 images are used for training. Then, the model is trained and the training
-      and validation metrics are returned.
-
-    Inputs:
-      - model (tf.keras.Model): The compiled Keras model to be trained.
-      - data: The complete dataset (e.g., image data) as a NumPy array with shape (N, H, W, C).
-      - labels: A DataFrame containing labels corresponding to 'data'. The column 'img_id' is dropped.
-      - n_epochs (int): Number of training epochs (default is 10).
-      - batch_size (int): Batch size for training (default is 64).
-      - verbose (int): Verbosity mode (default is 1).
-    
-    Output:
-      - train_acc: List of training accuracy values for each epoch.
-      - train_loss: List of training loss values for each epoch.
-      - val_acc: List of validation accuracy values for each epoch.
-      - val_loss: List of validation loss values for each epoch.
+    Trains the given CNN model using an efficient train/test split strategy.
     """
+    X = np.array(data, dtype=np.float32)
+    if 'img_id' in labels.columns:
+        y_df = labels.drop(['img_id'], axis=1)
+    else:
+        y_df = labels
+    Y = y_df.to_numpy(dtype=np.float32)
 
-    X = np.array(data)
-    Y = np.array(labels.drop(['img_id'], axis=1))
+    test_indices = np.arange(0, len(X), 5)
+    train_indices = np.setdiff1d(np.arange(len(X)), test_indices)
+
+    X_train, Y_train = X[train_indices], Y[train_indices]
+    X_test, Y_test = X[test_indices], Y[test_indices]
     
-    # Initialize lists for training and testing splits
-    X_train, Y_train = [], []
-    X_test, Y_test = [], []
-
-    # Use the first image of every 5 as test data; remaining images as training data
-    for i in range(len(X)):
-        if i % 5 == 0:
-            X_test.append(X[i])
-            Y_test.append(Y[i])
-        else:
-            X_train.append(X[i])
-            Y_train.append(Y[i])
-
-    # Convert lists to NumPy arrays with float32 type
-    X_train = np.array(X_train, dtype=np.float32)
-    Y_train = np.array(Y_train, dtype=np.float32)
-    X_test = np.array(X_test, dtype=np.float32)
-    Y_test = np.array(Y_test, dtype=np.float32)
+    print(f"Data split efficiently: {len(X_train)} training samples, {len(X_test)} validation samples.")
     
-    # Train the model with validation on the test data
     history = model.fit(
         X_train, Y_train,
         epochs=n_epochs,
@@ -200,29 +148,14 @@ def train_model(
         verbose=verbose
     )
 
-    # Extract metrics from training history
-    train_acc = history.history['accuracy']
-    train_loss = history.history['loss']
+    train_acc = history.history.get('accuracy', [])
+    train_loss = history.history.get('loss', [])
     val_acc = history.history.get('val_accuracy', [])
     val_loss = history.history.get('val_loss', [])
 
     return train_acc, train_loss, val_acc, val_loss
 
-#######################
-# Evaluate the Model
-#######################
 def evaluate_model(model, test_data, test_labels):
-    """
-    Evaluate the trained model on test data.
-
-    Inputs:
-      - model (tf.keras.Model): The trained Keras model.
-      - test_data: Test dataset as a NumPy array with shape (N, H, W, C).
-      - test_labels: Corresponding test labels as a NumPy array.
-    
-    Output:
-      - loss (float): The loss value on the test data.
-      - accuracy (float): The accuracy on the test data.
-    """
+    """Evaluates the trained model on test data."""
     loss, accuracy = model.evaluate(test_data, test_labels, verbose=1)
     return loss, accuracy
