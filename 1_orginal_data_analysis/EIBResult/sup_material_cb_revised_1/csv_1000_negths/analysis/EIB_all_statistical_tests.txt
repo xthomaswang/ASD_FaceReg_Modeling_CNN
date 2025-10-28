@@ -1,0 +1,150 @@
+
+=========================================================
+ ANALYZING POSITIVE SLOPE GROUP: 0.005 
+=========================================================
+
+--- STATISTICAL TESTS FOR POSITIVE SLOPE: 0.005 ---
+
+--- Repeated Measures ANOVA (Epoch as factor) ---
+ANOVA Table (type III tests)
+
+           Effect DFn  DFd        F        p p<.05   pes
+1           Epoch  99 5700 1360.214 0.00e+00     * 0.959
+2       threshold   2 5700    3.649 2.60e-02     * 0.001
+3 Epoch:threshold 198 5700    2.533 1.32e-26     * 0.081
+
+--- ANOVA and Tukey HSD at Epoch: 100 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F    p p<.05   pes
+1 threshold   2  57 1.069 0.35       0.036
+
+--- ANOVA and Tukey HSD at Epoch: 300 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F     p p<.05   pes
+1 threshold   2  57 1.433 0.247       0.048
+
+--- ANOVA and Tukey HSD at Epoch: 500 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F     p p<.05  pes
+1 threshold   2  57 0.284 0.754       0.01
+
+--> Plots for this group saved to: EIB_plots_slope_0.005.png 
+
+=========================================================
+ ANALYZING POSITIVE SLOPE GROUP: 0.05 
+=========================================================
+
+--- STATISTICAL TESTS FOR POSITIVE SLOPE: 0.05 ---
+
+--- Repeated Measures ANOVA (Epoch as factor) ---
+ANOVA Table (type III tests)
+
+           Effect DFn  DFd        F        p p<.05   pes
+1           Epoch  99 5700  259.756 0.00e+00     * 0.819
+2       threshold   2 5700 2288.032 0.00e+00     * 0.445
+3 Epoch:threshold 198 5700    3.671 1.38e-56     * 0.113
+
+--- ANOVA and Tukey HSD at Epoch: 100 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd      F        p p<.05   pes
+1 threshold   2  57 36.038 7.64e-11     * 0.558
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 threshold -0.5   -5              0  -0.0200  -0.0829    0.0429 7.25e- 1 ns          
+2 threshold -0.5   0               0   0.181    0.118     0.244  1.20e- 8 ****        
+3 threshold -5     0               0   0.201    0.138     0.264  6.47e-10 ****        
+
+--- ANOVA and Tukey HSD at Epoch: 300 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd      F        p p<.05   pes
+1 threshold   2  57 20.013 2.61e-07     * 0.413
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high      p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>      <dbl> <chr>       
+1 threshold -0.5   -5              0 -0.00125  -0.0575    0.0550 0.998      ns          
+2 threshold -0.5   0               0  0.128     0.0712    0.184  0.00000331 ****        
+3 threshold -5     0               0  0.129     0.0725    0.185  0.00000271 ****        
+
+--- ANOVA and Tukey HSD at Epoch: 500 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd      F        p p<.05   pes
+1 threshold   2  57 13.555 1.53e-05     * 0.322
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high     p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>     <dbl> <chr>       
+1 threshold -0.5   -5              0   0.0125  -0.0472    0.0722 0.87      ns          
+2 threshold -0.5   0               0   0.118    0.0578    0.177  0.0000432 ****        
+3 threshold -5     0               0   0.105    0.0453    0.165  0.000245  ***         
+
+--> Plots for this group saved to: EIB_plots_slope_0.05.png 
+
+=========================================================
+ ANALYZING POSITIVE SLOPE GROUP: 0.5 
+=========================================================
+
+--- STATISTICAL TESTS FOR POSITIVE SLOPE: 0.5 ---
+
+--- Repeated Measures ANOVA (Epoch as factor) ---
+ANOVA Table (type III tests)
+
+           Effect DFn  DFd       F        p p<.05   pes
+1           Epoch  99 5700  39.143  0.0e+00     * 0.405
+2       threshold   2 5700 564.914 1.5e-224     * 0.165
+3 Epoch:threshold 198 5700   0.493  1.0e+00       0.017
+
+--- ANOVA and Tukey HSD at Epoch: 100 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F        p p<.05  pes
+1 threshold   2  57 8.981 0.000407     * 0.24
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 threshold -0.5   -5              0  -0.0825  -0.148    -0.0169 0.0102   *           
+2 threshold -0.5   0               0   0.0287  -0.0368    0.0943 0.546    ns          
+3 threshold -5     0               0   0.111    0.0457    0.177  0.000408 ***         
+
+--- ANOVA and Tukey HSD at Epoch: 300 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F        p p<.05  pes
+1 threshold   2  57 9.018 0.000396     * 0.24
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 threshold -0.5   -5              0  -0.111   -0.189    -0.0331 0.00324  **          
+2 threshold -0.5   0               0   0.0150  -0.0632    0.0932 0.889    ns          
+3 threshold -5     0               0   0.126    0.0481    0.204  0.000771 ***         
+
+--- ANOVA and Tukey HSD at Epoch: 500 ---
+ANOVA Table (type III tests)
+
+     Effect DFn DFd     F     p p<.05   pes
+1 threshold   2  57 6.636 0.003     * 0.189
+
+ -> ANOVA result is significant, performing Tukey HSD post-hoc test:
+# A tibble: 3 × 9
+  term      group1 group2 null.value estimate conf.low conf.high   p.adj p.adj.signif
+* <chr>     <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>   <dbl> <chr>       
+1 threshold -0.5   -5              0  -0.0825  -0.163   -0.00210 0.0431  *           
+2 threshold -0.5   0               0   0.0362  -0.0441   0.117   0.527   ns          
+3 threshold -5     0               0   0.119    0.0384   0.199   0.00219 **          
+
+--> Plots for this group saved to: EIB_plots_slope_0.5.png 
