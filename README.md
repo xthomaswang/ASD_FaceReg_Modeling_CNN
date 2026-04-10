@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.02.646903-b31b1b)](https://doi.org/10.1101/2025.04.02.646903)
+[![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/)
 
 Official code repository for:
 
@@ -16,6 +17,8 @@ Official code repository for:
 > *Communications Biology* (accepted)
 >
 > Preprint: [https://doi.org/10.1101/2025.04.02.646903](https://doi.org/10.1101/2025.04.02.646903)
+>
+> Project page: [https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/](https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/)
 
 ## Overview
 
