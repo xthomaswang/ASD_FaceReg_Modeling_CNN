@@ -1,0 +1,76 @@
+============================================================
+TRAINING ACCURACY (20 runs per slope×epoch)
+============================================================
+
+=== Omnibus ANOVA (Epoch factor, selected epochs) ===
+ANOVA Table (type III tests)
+
+         Effect DFn DFd         F p p<.05   pes
+1       Epoch_f  10 627  7917.032 0     * 0.992
+2         slope   2 627 16407.783 0     * 0.981
+3 Epoch_f:slope  20 627   514.391 0     * 0.943
+
+============================================================
+VALIDATION ACCURACY (20 runs per slope×epoch)
+============================================================
+
+=== Omnibus ANOVA (Epoch factor, selected epochs) ===
+ANOVA Table (type III tests)
+
+         Effect DFn DFd         F p p<.05   pes
+1       Epoch_f  10 627  7302.693 0     * 0.991
+2         slope   2 627 18269.652 0     * 0.983
+3 Epoch_f:slope  20 627   392.401 0     * 0.926
+
+=== Per-epoch Val Acc ANOVAs + Tukey ===
+
+--- Epoch 10 ---
+ANOVA Table (type III tests)
+
+  Effect DFn DFd       F        p p<.05   pes
+1  slope   2  57 299.366 5.83e-31     * 0.913
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.5    1               0     3.36     2.50      4.22 1.21e-11 ****        
+2 slope 0.5    2               0    -5.27    -6.13     -4.41 1.12e-11 ****        
+3 slope 1      2               0    -8.63    -9.49     -7.77 1.12e-11 ****        
+
+--- Epoch 50 ---
+ANOVA Table (type III tests)
+
+  Effect DFn DFd        F        p p<.05   pes
+1  slope   2  57 3641.962 7.39e-61     * 0.992
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.5    1               0     27.5     26.3      28.8 1.12e-11 ****        
+2 slope 0.5    2               0    -17.6    -18.9     -16.3 1.12e-11 ****        
+3 slope 1      2               0    -45.1    -46.4     -43.9 1.12e-11 ****        
+
+--- Epoch 100 ---
+ANOVA Table (type III tests)
+
+  Effect DFn DFd        F        p p<.05   pes
+1  slope   2  57 1154.476 7.64e-47     * 0.976
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.5    1               0    24.4     23.0     25.9   1.12e-11 ****        
+2 slope 0.5    2               0    -1.58    -3.04    -0.119 3.11e- 2 *           
+3 slope 1      2               0   -26.0    -27.5    -24.6   1.12e-11 ****        
+
+============================================================
+FINAL TEST ACCURACY (single evaluation per run)
+============================================================
+
+ANOVA Table (type III tests)
+
+  Effect DFn DFd        F        p p<.05   pes
+1  slope   2  57 1197.188 2.78e-47     * 0.977
+# A tibble: 3 × 9
+  term  group1 group2 null.value estimate conf.low conf.high    p.adj p.adj.signif
+* <chr> <chr>  <chr>       <dbl>    <dbl>    <dbl>     <dbl>    <dbl> <chr>       
+1 slope 0.5    1               0    24.2     22.7     25.6   1.12e-11 ****        
+2 slope 0.5    2               0    -2.06    -3.50    -0.629 2.9 e- 3 **          
+3 slope 1      2               0   -26.2    -27.7    -24.8   1.12e-11 ****        

@@ -1,126 +1,101 @@
-# A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations
+# A Neurocomputational Basis of Face Recognition Changes in ASD
 
-This research project explores convolutional neural networks (CNNs) with biologically-inspired modifications to model autism spectrum disorder (ASD) characteristics:
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.02.646903-b31b1b)](https://doi.org/10.1101/2025.04.02.646903)
 
-- **E/I Imbalance Model**: Custom activation function simulating excitatory/inhibitory imbalances
-- **Internal Noise Model**: Gaussian noise layers modeling stochastic neural representations
+Official code repository for:
 
----
+> **A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations**
+>
+> Xijing Wang<sup>1,2</sup>, Emily Rios<sup>2</sup>, and Lang Chen<sup>2,3,*</sup>
+>
+> <sup>1</sup>Mathematics and Computer Science, <sup>2</sup>Neuroscience Program, <sup>3</sup>Psychology, Santa Clara University
+>
+> <sup>*</sup>Correspondence: Lang Chen (lchen4@scu.edu)
+>
+> *Communications Biology* (accepted)
+>
+> Preprint: [https://doi.org/10.1101/2025.04.02.646903](https://doi.org/10.1101/2025.04.02.646903)
 
-## 1. Model Structure
+## Overview
 
-![Model Architecture](docs/images/CNN_structure.jpg)
+This project investigates how Excitatory/Inhibitory (E/I) imbalance and internal neural noise affect face recognition in a biologically grounded computational model of the ventral visual stream. We use **CORnet-Z** — a feedforward CNN whose layers map onto cortical areas V1, V2, V4, and IT — and systematically manipulate the E/I gain ratio across these layers to simulate conditions associated with Autism Spectrum Disorder (ASD).
 
----
+Key findings:
 
-## 2. Project Structure
+- Increased excitation (E > I) degrades face identity representations more than inhibition-dominated conditions
+- The effect is reflected in both classification accuracy and representational similarity structure (RSA)
+- Results are consistent across multiple random initializations and dataset scales
 
-### `src/preprocessing.py`
-- `load_image(image_path)`: Loads an image from a given path
-- `resize_image(image, width, height)`: Resizes an image while maintaining aspect ratio
-- `normalize_image(image)`: Normalizes pixel values to [0, 1]
-- `augment_image(image)`: Performs data augmentation
+## Repository Structure
 
-### `src/models.py`
-- **`CustomActivation(slope_positive, slope_negative, threshold)`**: Custom activation layer supporting:
-  - **Thresholded ReLU**: `slope_negative=0.0` (default)
-  - **Thresholded Leaky ReLU**: `slope_negative>0.0`
-  - Configurable activation threshold
+```
+├── small-scale-custom-cnn/   # Original 50-image pipeline (TensorFlow/Keras baseline)
+├── large-scale-cornet/       # CORnet-based large-scale experiments (PyTorch)
+│   ├── src/                  # Modular source code (models, data, analysis, utils)
+│   ├── notebooks/            # CORnet experiment notebook
+│   ├── results/              # Lightweight JSON results
+│   ├── rcode/                # R statistical analyses and output figures
+│   └── data/                 # Dataset manifests (no raw images)
+├── docs/                     # GitHub Pages site assets
+├── LICENSE
+└── CITATION.cff
+```
 
-- **`build_cnn(input_shape, slope_positive, slope_negative, threshold, noise_level, filter_size, num_classes, learning_rate, categorical)`**: 
-  - Builds CNN with CustomActivation layers
-  - Parameters control E/I imbalance simulation and internal noise
-  
-- `train_model(model, data, labels, n_epochs, batch_size, verbose)`: Trains the model with efficient train/test splitting
-- `evaluate_model(model, test_data, test_labels)`: Evaluates classification accuracy
+- **`small-scale-custom-cnn/`** — original customized-CNN pipeline (10 identities, 50 images, TensorFlow/Keras)
+- **`large-scale-cornet/`** — CORnet-based experiments with VGGFace2 (100 identities, 10,000 images, PyTorch) and LFW evaluation
 
-### `src/analysis.py`
-- `compute_correlation_matrix(features)`: Computes feature correlation matrices
-- `extract_intermediate_features(model, layer_name, data)`: Extracts activations from intermediate layers
-- `compute_pearson_correlation(vec1, vec2)`: Computes Pearson correlation coefficients
+See [`small-scale-custom-cnn/README.md`](small-scale-custom-cnn/README.md) and [`large-scale-cornet/README.md`](large-scale-cornet/README.md) for detailed documentation of each pipeline.
 
-### `src/utils.py`
-- `is_google_colab()`: Checks if running on Google Colab
-- `install_missing_packages()`: Installs missing dependencies automatically
+## Requirements
 
----
+Python 3.8+ with PyTorch. For the CORnet pipeline (`large-scale-cornet/`):
 
-## 3. Running the Project
-
-### Installing Dependencies
 ```bash
-pip install -r requirements.txt
+pip install -r large-scale-cornet/requirements.txt
+pip install git+https://github.com/dicarlolab/CORnet.git
 ```
 
-### Running Locally
-Execute scripts with Python or use Jupyter Notebooks from the `notebooks/` directory.
+The legacy pipeline (`small-scale-custom-cnn/`) additionally requires TensorFlow/Keras; see that directory for details.
 
-### Running in Google Colab
-Clone the repository and run `install_missing_packages()` from `src/utils.py` if necessary.
+## Reproducing Results
 
----
+1. **Dataset preparation** — VGGFace2 and LFW images are not redistributed due to licensing. Download them from the official sources and use the manifests in `large-scale-cornet/data/` to reconstruct the subsets used in the paper. The 50-image sample for the small-scale pipeline is included directly.
 
-## 4. Training & Evaluation
+2. **CORnet experiments** — Open `large-scale-cornet/notebooks/CORnet.ipynb` (designed for Google Colab with GPU). The notebook runs the full pipeline: dataset creation, model training under E/I conditions, RSA extraction, and visualization.
 
-### Training
-1. Build model using `build_cnn()` with desired parameters:
-   - `slope_negative=0.0` for Thresholded ReLU (E/I Imbalance)
-   - `noise_level>0` for Internal Noise model
-2. Load and preprocess dataset
-3. Train using `train_model()`
-4. Evaluate using `evaluate_model()`
+3. **Statistical analysis** — R scripts in `large-scale-cornet/rcode/` reproduce the ANOVA and accuracy analyses. Pre-computed outputs are in `large-scale-cornet/rcode/output/`.
 
-### Recommended Training Epochs
-At least 750 epochs are recommended to observe strong correlation effects.
+## Data Availability
 
----
+| Dataset | Included | Notes |
+|---------|----------|-------|
+| 50-image cropped sample | Yes (`small-scale-custom-cnn/data/`) | Original small-scale experiment |
+| VGGFace2 subset manifest | Yes (`large-scale-cornet/data/`) | 100 identities, 10,000 file references |
+| LFW subset manifest | Yes (`large-scale-cornet/data/`) | 50 identities, 500 file references |
+| Raw VGGFace2 images | No | Download from [VGGFace2](https://github.com/ox-vgg/vgg_face2) |
+| Raw LFW images | No | Download from [LFW](http://vis-www.cs.umass.edu/lfw/) |
 
-## 5. Results Directory Structure
+## Citation
 
-Experimental results are stored in `res/` folder:
+If you use this code or find our work useful, please cite:
 
-```
-res/EIB/750/
-    ├── trainedAcc_750.json
-    ├── trainedLoss_750.json
-    ├── validationAcc_750.json
-    ├── validationLoss_750.json
-    └── cor_output_750_4.json
-```
-
----
-
-## 6. Feature Analysis
-
-### Extract and Analyze Features
-```python
-# Extract intermediate features
-features = extract_intermediate_features(model, "layer_name", test_data)
-
-# Compute correlation matrix
-corr_matrix = compute_correlation_matrix(features)
-
-# Visualize
-import seaborn as sns
-import matplotlib.pyplot as plt
-sns.heatmap(corr_matrix, cmap="coolwarm")
-plt.show()
+```bibtex
+@article{wang2025neurocomputational,
+  title   = {A neurocomputational basis of face recognition changes in {ASD}:
+             {E/I} balance, internal noise, and weak neural representations},
+  author  = {Wang, Xijing and Rios, Emily and Chen, Lang},
+  journal = {Communications Biology},
+  year    = {2025},
+  doi     = {10.1101/2025.04.02.646903},
+  note    = {Accepted; preprint available on bioRxiv}
+}
 ```
 
-![Feature Correlation Example](docs/images/correlation_heatmap.png)
+## License
 
----
+This project is licensed under the [MIT License](LICENSE).
 
-## 7. Contributors For Codes
-- Xijing Wang
-- Dr. Lang Chen
+## Contact
 
----
-
-## 8. License
-MIT License
-
----
-
-## 9. References
-Waiting for link ...
+For questions about the code or data, please [open an issue](../../issues) on this repository or contact Lang Chen at lchen4@scu.edu.

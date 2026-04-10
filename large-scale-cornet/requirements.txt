@@ -1,0 +1,17 @@
+numpy
+scipy
+matplotlib
+pandas
+seaborn
+Pillow
+tqdm
+
+# PyTorch (for CORnet)
+torch
+torchvision
+
+# Optional: for downloading LFW dataset
+scikit-learn
+
+# CORnet model (install separately)
+# pip install git+https://github.com/dicarlolab/CORnet.git

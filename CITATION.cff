@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated paper."
+title: "A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations"
+type: article
+authors:
+  - family-names: Wang
+    given-names: Xijing
+    affiliation: "Mathematics and Computer Science, and Neuroscience Program, Santa Clara University"
+  - family-names: Rios
+    given-names: Emily
+    affiliation: "Neuroscience Program, Santa Clara University"
+  - family-names: Chen
+    given-names: Lang
+    affiliation: "Psychology and Neuroscience Program, Santa Clara University"
+    email: lchen4@scu.edu
+journal: "Communications Biology"
+year: 2025
+doi: "10.1101/2025.04.02.646903"
+url: "https://doi.org/10.1101/2025.04.02.646903"
+license: MIT
+repository-code: "https://github.com/xthomaswang/ASD_FaceReg_Modeling_CNN"
+keywords:
+  - autism spectrum disorder
+  - face recognition
+  - excitatory-inhibitory balance
+  - CORnet
+  - representational similarity analysis
+  - computational neuroscience
