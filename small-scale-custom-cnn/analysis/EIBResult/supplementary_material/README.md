@@ -1,4 +1,4 @@
-# EIB Results - Supplementary Material CB Revised 1
+# EIB Results — Supplementary Material
 
 ## Folder Structure Documentation
 
@@ -7,7 +7,7 @@ This folder contains supplementary material analysis results for EIB (Effective 
 ### Top-level Folder Structure
 
 ```
-sup_material_cb_revised_1/
+supplementary_material/
 ├── ACC_data_0.R                    # Main analysis script
 ├── csv_1000_categorical/           # Training Accuracy with categorical cross-entropy loss 
 ├── csv_1000_negslope/              # Negative slope analysis results
