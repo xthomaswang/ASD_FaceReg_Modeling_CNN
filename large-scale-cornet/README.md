@@ -60,8 +60,8 @@ new/
 ├── data/                      # Dataset manifests only (no raw images)
 │   ├── vggface2_identities.csv
 │   ├── vggface2_subset_manifest.csv
-│   ├── lfw_identities.csv
-│   └── lfw_subset_manifest.csv
+│   ├── lfw_identities.csv          # Exploratory only; not in published results
+│   └── lfw_subset_manifest.csv     # Exploratory only; not in published results
 ├── results/EIB/cornet/        # Lightweight JSON results from supplementary CORnet runs
 └── rcode/                     # R statistical analyses and supplementary output figures
 ```
@@ -73,7 +73,7 @@ This directory focuses on the supplementary CORnet workflow. Legacy components f
 The present `large-scale-cornet/` package therefore centers on:
 
 - CORnet-based modeling and feature extraction
-- large-scale VGGFace2/LFW manifest documentation
+- VGGFace2 dataset manifest documentation
 - lightweight result archives for supplementary CORnet experiments
 - R-based statistical summaries linked to the later-stage analyses
 
@@ -88,7 +88,7 @@ Examples of earlier legacy components that are not part of this supplementary di
 
 ## Data policy
 
-No raw VGGFace2 or LFW image files are redistributed. The `data/` directory contains only identity lists and file-reference manifests.
+No raw VGGFace2 image files are redistributed. The `data/` directory contains only identity lists and file-reference manifests. See [`data/README.md`](data/README.md) for details.
 
 ## Quick start
 

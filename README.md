@@ -75,9 +75,7 @@ The legacy pipeline (`small-scale-custom-cnn/`) additionally requires TensorFlow
 |---------|----------|-------|
 | 50-image cropped sample | Yes (`small-scale-custom-cnn/data/`) | Original small-scale experiment |
 | VGGFace2 subset manifest | Yes (`large-scale-cornet/data/`) | 100 identities, 10,000 file references |
-| LFW subset manifest | Yes (`large-scale-cornet/data/`) | 50 identities, 500 file references |
 | Raw VGGFace2 images | No | Download from [VGGFace2](https://github.com/ox-vgg/vgg_face2) |
-| Raw LFW images | No | Download from [LFW](http://vis-www.cs.umass.edu/lfw/) |
 
 ## Citation
 

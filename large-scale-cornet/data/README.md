@@ -1,31 +1,22 @@
-# New Dataset Notes
+# Dataset Notes
 
-This directory documents the datasets used by the later-stage pipeline without redistributing copyrighted image data.
+This directory documents the datasets used by the large-scale CORnet pipeline without redistributing copyrighted image data.
 
-## VGGFace2 subset used in this project
+## VGGFace2 subset
 
-- source dataset: VGGFace2
-- subset used here: 100 identities x 100 images each
-- total listed images: 10,000
-- official project page: <https://www.robots.ox.ac.uk/~vgg/data/vgg_face2/>
-- manifest files:
-  - `vggface2_identities.csv`
-  - `vggface2_subset_manifest.csv`
+- Source dataset: VGGFace2
+- Subset used: 100 identities x 100 images each (10,000 total)
+- Official project page: <https://www.robots.ox.ac.uk/~vgg/data/vgg_face2/>
+- Manifest files:
+  - `vggface2_identities.csv` — the 100 selected identity IDs and names
+  - `vggface2_subset_manifest.csv` — the 10,000 image filenames used in the balanced subset
 
-`vggface2_identities.csv` records the 100 selected identity IDs and their names from the official `identity_meta.csv` metadata. `vggface2_subset_manifest.csv` records which image filenames from those identities were used in the balanced 10,000-image subset.
+These are the identities and images used in the analyses reported in the paper and supplementary materials.
 
-## LFW subset used for additional testing
+## LFW files (exploratory only)
 
-- source dataset: Labeled Faces in the Wild (LFW)
-- subset used here: 50 identities x 10 images each
-- total listed images: 500
-- official project page: <http://vis-www.cs.umass.edu/lfw/>
-- manifest files:
-  - `lfw_identities.csv`
-  - `lfw_subset_manifest.csv`
-
-This LFW subset was used as a smaller benchmark/evaluation set relative to the VGGFace2 experiments.
+This directory also contains `lfw_identities.csv` and `lfw_subset_manifest.csv` (50 identities, 500 images). LFW was used only for exploratory internal testing and is not part of the reported analyses presented in the paper or supplementary materials. Raw LFW images are not redistributed in this repository. Users interested in this dataset should obtain it from the official [LFW source](http://vis-www.cs.umass.edu/lfw/) and follow the corresponding dataset terms and citation requirements.
 
 ## Redistribution policy
 
-The repository does not include raw VGGFace2 or LFW image files. Only dataset descriptions and manifest CSVs are included so the exact identities and image filenames used in the experiments remain documented.
+The repository does not include raw VGGFace2 or LFW image files. Only manifest CSVs are included so the exact identities and filenames used in the experiments remain documented.
