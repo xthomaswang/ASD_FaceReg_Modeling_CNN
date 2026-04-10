@@ -81,7 +81,7 @@ The legacy pipeline (`small-scale-custom-cnn/`) additionally requires TensorFlow
 If you use this code or find our work useful, please cite:
 
 ```bibtex
-@article{wang2025neurocomputational,
+@article{wang2025cnnFaceASD,
   title   = {A neurocomputational basis of face recognition changes in {ASD}:
              {E/I} balance, internal noise, and weak neural representations},
   author  = {Wang, Xijing and Rios, Emily and Chen, Lang},
