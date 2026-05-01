@@ -2,7 +2,7 @@
 
 """
 ASD Face Recognition Modeling with CNN
-A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations
+E/I imbalance and internal noise cause weak neural representations and face recognition challenges in ASD
 """
 
 __version__ = "1.0.0"
@@ -19,4 +19,3 @@ __all__ = [
     'analysis',
     'utils',
 ]
-

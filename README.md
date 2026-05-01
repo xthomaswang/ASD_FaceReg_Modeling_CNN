@@ -1,12 +1,12 @@
-# A Neurocomputational Basis of Face Recognition Changes in ASD
+# E/I imbalance and internal noise cause weak neural representations and face recognition challenges in ASD
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Preprint](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.02.646903-b31b1b)](https://doi.org/10.1101/2025.04.02.646903)
+[![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs42003--026--10094--2-blue)](https://doi.org/10.1038/s42003-026-10094-2)
 [![Project Page](https://img.shields.io/badge/Project-Page-blue)](https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/)
 
 Official code repository for:
 
-> **A neurocomputational basis of face recognition changes in ASD: E/I balance, internal noise, and weak neural representations**
+> **E/I imbalance and internal noise cause weak neural representations and face recognition challenges in ASD**
 >
 > Xijing Wang<sup>1,2</sup>, Emily Rios<sup>2</sup>, and Lang Chen<sup>2,3,*</sup>
 >
@@ -14,9 +14,11 @@ Official code repository for:
 >
 > <sup>*</sup>Correspondence: Lang Chen (lchen4@scu.edu)
 >
-> *Communications Biology* (accepted)
+> *Communications Biology* (2026)
 >
-> Preprint: [https://doi.org/10.1101/2025.04.02.646903](https://doi.org/10.1101/2025.04.02.646903)
+> DOI: [https://doi.org/10.1038/s42003-026-10094-2](https://doi.org/10.1038/s42003-026-10094-2)
+>
+> Received: 09 April 2025; Accepted: 09 April 2026; Published: 24 April 2026
 >
 > Project page: [https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/](https://xthomaswang.github.io/ASD_FaceReg_Modeling_CNN/)
 
@@ -81,15 +83,18 @@ The legacy pipeline (`small-scale-custom-cnn/`) additionally requires TensorFlow
 
 If you use this code or find our work useful, please cite:
 
+Wang, X., Rios, E. & Chen, L. E/I imbalance and internal noise cause weak neural representations and face recognition challenges in ASD. *Commun Biol* (2026). [https://doi.org/10.1038/s42003-026-10094-2](https://doi.org/10.1038/s42003-026-10094-2)
+
 ```bibtex
-@article{wang2025cnnFaceASD,
-  title   = {A neurocomputational basis of face recognition changes in {ASD}:
-             {E/I} balance, internal noise, and weak neural representations},
+@article{wang2026eiImbalanceASD,
+  title   = {{E/I} imbalance and internal noise cause weak neural representations
+             and face recognition challenges in {ASD}},
   author  = {Wang, Xijing and Rios, Emily and Chen, Lang},
   journal = {Communications Biology},
-  year    = {2025},
-  doi     = {10.1101/2025.04.02.646903},
-  note    = {Accepted; preprint available on bioRxiv}
+  year    = {2026},
+  doi     = {10.1038/s42003-026-10094-2},
+  url     = {https://doi.org/10.1038/s42003-026-10094-2},
+  note    = {Published 24 April 2026}
 }
 ```
 
